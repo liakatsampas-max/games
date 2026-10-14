@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Word Quest</title>
+<style>
+:root{--bg:#f6f4ee;--card:#fff;--ink:#1d2433;--mut:#6b7385;--pri:#3b5bdb;--ok:#2f9e44;--bad:#e03131;--line:#e3e0d6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#14171f;--card:#1e2330;--ink:#eef0f6;--mut:#9aa3b8;--pri:#748ffc;--ok:#51cf66;--bad:#ff6b6b;--line:#2d3345}}
+:root[data-theme="dark"]{--bg:#14171f;--card:#1e2330;--ink:#eef0f6;--mut:#9aa3b8;--pri:#748ffc;--ok:#51cf66;--bad:#ff6b6b;--line:#2d3345}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.45 Georgia,'Times New Roman',serif;min-height:100vh}
+.w{max-width:520px;margin:0 auto;padding:18px 16px 40px}
+h1{font-size:2rem;margin:.3em 0 .1em}p.s{color:var(--mut);margin:0 0 18px;font-family:system-ui,sans-serif;font-size:.95rem}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+button{font:600 1rem system-ui,sans-serif;border:0;border-radius:12px;padding:14px;width:100%;cursor:pointer;background:var(--pri);color:#fff;margin-top:8px}
+button.alt{background:var(--card);color:var(--ink);border:1px solid var(--line)}
+.opt{background:var(--card);color:var(--ink);border:2px solid var(--line);text-align:left;margin-top:10px;font-size:1.05rem}
+.opt.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 15%,var(--card))}
+.opt.bad{border-color:var(--bad);background:color-mix(in srgb,var(--bad) 15%,var(--card))}
+.top{display:flex;justify-content:space-between;font:600 .9rem system-ui,sans-serif;color:var(--mut)}
+.bar{height:8px;background:var(--line);border-radius:5px;margin:8px 0 16px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--pri);width:100%}
+.tag{font:700 .72rem system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--pri)}
+.q{font-size:1.25rem;margin:6px 0 4px}
+.fb{font:.95rem system-ui,sans-serif;margin-top:12px;padding:12px;border-radius:10px;background:var(--bg)}
+.big{font-size:3rem;text-align:center;margin:6px 0}
+.row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--line);font-family:system-ui,sans-serif;font-size:.92rem;gap:12px}
+.row b{font-family:Georgia,serif;white-space:nowrap}.row span{color:var(--mut);text-align:right}
+.hide{display:none}
+</style></head><body><div class="w" id="app"></div>
+<script>
+const W=[
+["habitation","the fact of people living in a place","The archaeologists found clear signs of human ___ in the cave, including hearths and tools.","habitation"],
+["indigenous","originating in a particular place; native to it","The ___ people of the region have farmed this valley for thousands of years.","indigenous"],
+["guardianship","the responsibility of protecting or looking after someone or something","The charity took on the ___ of the ancient forest.","guardianship"],
+["outcropping","a mass of rock sticking out of the ground or a slope","We sheltered from the wind behind a rocky ___ on the hillside.","outcropping"],
+["bound for a place","travelling towards a particular destination","The cargo ship, ___ Rotterdam, left port at dawn.","bound for"],
+["torrential","(of rain) falling very heavily and fast","___ rain flooded the streets within an hour.","torrential"],
+["prized","valued very highly","Her grandfather's watch was her most ___ possession.","prized"],
+["renowned","famous and respected for something","She is a ___ expert on Byzantine art, invited to lecture worldwide.","renowned"],
+["perfect timing","happening at exactly the right moment","The sun broke through the clouds with ___ just as the ceremony began.","perfect timing"],
+["sheer","(of a cliff or slope) almost vertical; also: complete, absolute","The climbers stared up at the ___ rock face, almost vertical from base to summit.","sheer"],
+["towering","extremely tall, rising high above its surroundings","We walked between ___ pines that blocked out the sky.","towering"],
+["sweeping","wide in range or effect; covering a large area in a smooth curve","The government announced ___ reforms affecting every school in the country.","sweeping"],
+["fading","gradually becoming weaker, paler or less distinct","We watched the ___ light of the evening disappear behind the hills.","fading"],
+["occupy","to live in, be in, or fill a place or period of time","Several families still ___ the old farmhouse.","occupy"],
+["acquire","to gain or buy something, often through effort","She hopes to ___ a rare first edition at the auction.","acquire"],
+["recount","to tell a story or describe events in detail","He would often ___ his adventures at sea to anyone who'd listen.","recount"]
+].map(([w,d,s,a])=>({w,d,s,a}));
+const $=id=>document.getElementById(id),app=$("app");
+const sh=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+let Q,i,score,streak,best,miss,t0,timer,locked,T=15000;
+function home(){app.innerHTML=`<h1>Word Quest</h1><p class="s">16 proficiency words · gap-fills and definitions · beat the clock</p>
+<div class="card"><b>How it works</b><p class="s" style="margin:6px 0 0">Each word appears once. Answer fast for bonus points (up to +10) and build a streak for extra. Missed words come back at the end.</p></div>
+<button onclick="study()">📖 Study the words first</button><button class="alt" onclick="start()">▶ Start game</button>`}
+function study(){app.innerHTML=`<h1>Word list</h1><div class="card">${W.map(x=>`<div class="row"><b>${x.w}</b><span>${x.d}</span></div>`).join("")}</div><button onclick="start()">▶ Start game</button><button class="alt" onclick="home()">Back</button>`}
+function start(){Q=sh(W).map((x,k)=>({...x,mode:k%2?"def":"gap"}));i=0;score=0;streak=0;best=0;miss=[];show()}
+function show(){
+ if(i>=Q.length)return end();
+ const q=Q[i],opts=sh([q,...sh(W.filter(x=>x!==q)).slice(0,3)]);locked=false;
+ const prompt=q.mode=="gap"?q.s.replace("___",'<u>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</u>'):"“"+q.d+"”";
+ app.innerHTML=`<div class="top"><span>${i+1} / ${Q.length}</span><span>🔥 ${streak}</span><span>⭐ ${score}</span></div><div class="bar"><i id="tb"></i></div>
+ <div class="card"><div class="tag">${q.mode=="gap"?"Complete the sentence":"Which word means…"}</div><p class="q">${prompt}</p></div>
+ ${opts.map(o=>`<button class="opt" data-w="${o.w}">${o.w}</button>`).join("")}<div id="fb"></div>`;
+ app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>pick(b.dataset.w,b));
+ t0=Date.now();clearInterval(timer);
+ timer=setInterval(()=>{const l=Math.max(0,1-(Date.now()-t0)/T),e=$("tb");if(e)e.style.width=l*100+"%";if(l<=0)pick(null)},100);
+}
+function pick(w,btn){
+ if(locked)return;locked=true;clearInterval(timer);
+ const q=Q[i],ok=w===q.w,left=Math.max(0,1-(Date.now()-t0)/T);
+ let gain=0;
+ if(ok){streak++;best=Math.max(best,streak);gain=10+Math.round(left*10)+Math.min(streak-1,5)*2;score+=gain}else{streak=0;miss.push(q)}
+ app.querySelectorAll(".opt").forEach(b=>{b.disabled=true;if(b.dataset.w===q.w)b.classList.add("ok");else if(b===btn)b.classList.add("bad")});
+ $("fb").innerHTML=`<div class="fb">${ok?`✅ Correct! +${gain}`:(w===null?"⏰ Time's up.":"❌ Not quite.")}<br><b>${q.w}</b>: ${q.d}.<br><i>${q.s.replace("___","<b>"+q.a+"</b>")}</i></div><button onclick="i++;show()">${i==Q.length-1?"See results":"Next →"}</button>`;
+}
+function end(){
+ clearInterval(timer);const N=Q.length,pct=Math.round((N-miss.length)/N*100);
+ const em=pct>=90?"🏆":pct>=70?"🎉":pct>=50?"👍":"💪";
+ app.innerHTML=`<div class="big">${em}</div><h1 style="text-align:center">${score} points</h1><p class="s" style="text-align:center">${N-miss.length}/${N} correct · best streak ${best}</p>
+ ${miss.length?`<div class="card"><b>Words to review</b>${miss.map(x=>`<div class="row"><b>${x.w}</b><span>${x.d}</span></div>`).join("")}</div><button onclick="retry()">🔁 Practise missed words</button>`:`<div class="card">Perfect round — every word correct!</div>`}
+ <button class="alt" onclick="start()">Play again</button><button class="alt" onclick="home()">Home</button>`}
+function retry(){const m=miss;Q=sh(m).map((x,k)=>({...x,mode:Math.random()<.5?"def":"gap"}));i=0;streak=0;miss=[];const s=score;show();score=s}
+home();
+</script></body></html>

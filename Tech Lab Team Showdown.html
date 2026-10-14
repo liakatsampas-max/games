@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tech Lab Team Showdown</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;800&display=swap">
+<style>
+:root{--bg:#eef4ff;--ink:#1b2a49;--card:#fff;--line:#1b2a49;--b:#ffc93c;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#16213f;--ink:#f3f7ff;--card:#243258;--line:#f3f7ff}}
+:root[data-theme="dark"]{--bg:#16213f;--ink:#f3f7ff;--card:#243258;--line:#f3f7ff}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Baloo 2","Trebuchet MS",Arial,sans-serif;font-weight:500}
+main{max-width:980px;margin:0 auto;padding:12px}
+h1{font-size:clamp(2rem,6vw,3.2rem);margin:4px 0;font-weight:800;line-height:1.05}
+.center{text-align:center}
+button{font:inherit;font-weight:800;color:#1b2a49;cursor:pointer}
+button:focus-visible{outline:4px solid #ff6b6b;outline-offset:2px}
+.b{background:var(--b);border:3px solid var(--line);border-radius:16px;padding:8px 18px;font-size:1.25rem;box-shadow:0 4px 0 var(--line)}
+.b:active{transform:translateY(3px);box-shadow:0 1px 0 var(--line)}
+.b.w{background:#fff}
+#sb{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.tm{border:4px solid var(--line);border-radius:18px;padding:8px;text-align:center;color:#1b2a49;position:relative}
+.tm.on{box-shadow:0 0 0 6px #ff6b6b}
+.tm .nm{font-size:1.25rem;font-weight:800;cursor:pointer}
+.tm .pt{font-size:3rem;font-weight:800;line-height:1}
+.tm .adj{display:flex;gap:6px;justify-content:center;margin-top:4px}
+.tm .adj button{border:2px solid var(--line);background:#fff;border-radius:10px;font-size:.95rem;padding:0 10px}
+.menu{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:14px 0}
+.menu .b{font-size:1.1rem;padding:6px 14px}
+.menu .b.sel{background:#7be495}
+#stage{background:var(--card);border:4px solid var(--line);border-radius:22px;padding:16px;text-align:center;min-height:300px}
+.ins{font-size:clamp(1.3rem,3.6vw,2rem);font-weight:800;margin-bottom:8px}
+.sub{font-size:1.2rem;margin:4px 0 10px}
+.secret{font-size:clamp(2rem,7vw,4rem);font-weight:800;border:4px dashed var(--line);border-radius:18px;padding:14px;margin:10px auto;max-width:700px;line-height:1.1;color:var(--ink)}
+.timer{font-size:4.5rem;font-weight:800;line-height:1;margin:6px 0}
+.timer.low{color:#e63946}
+.row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:10px 0}
+.aw{margin-top:14px;border-top:3px dashed var(--line);padding-top:10px}
+.aw .b{color:#1b2a49}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin:12px 0}
+.tile{background:#fff;border:4px solid var(--line);border-radius:18px;padding:14px 8px;font-size:1.5rem;min-height:96px;box-shadow:0 4px 0 var(--line);line-height:1.1}
+.tile .e{display:block;font-size:2.4rem}
+.tile.ok{background:#7be495}.tile.no{background:#ffb3b3}
+.big{font-size:5rem}
+.legend{text-align:left;max-width:560px;margin:14px auto;background:var(--card);border:3px solid var(--line);border-radius:16px;padding:10px 16px;font-size:1.05rem}
+@media(prefers-reduced-motion:reduce){*{animation:none!important}}
+</style>
+</head>
+<body>
+<main id="app"></main>
+<script>
+var W=[
+{w:"computer programming",e:"💻",m:"Writing code to tell a computer what to do.",s:"I like ___ because I can write code."},
+{w:"game design",e:"🎮",m:"Planning and making a video game.",s:"In ___ class, we make our own video game."},
+{w:"technology",e:"📱",m:"Machines and tools like phones and computers.",s:"Phones, tablets and computers are all ___."},
+{w:"at the beginning of",e:"🏁",m:"At the start of something.",s:"We say hello ___ the lesson."},
+{w:"advanced",e:"🚀",m:"Very high level. Not for beginners.",s:"This puzzle is very hard. It is ___."},
+{w:"robotics",e:"🤖",m:"Building and using robots.",s:"In ___ club, we build robots."},
+{w:"3D printer",e:"🖨️",m:"A machine that makes real objects.",s:"A ___ can make a toy from plastic."},
+{w:"really",e:"😃",m:"Very, very much!",s:"I am ___ happy today!"},
+{w:"fantastic",e:"🌟",m:"Wonderful! Great!",s:"Your drawing is ___! I love it."},
+{w:"miss a class",e:"🤒",m:"Not go to a lesson.",s:"I am sick, so I must ___ today."},
+{w:"do an experiment",e:"🧪",m:"Test an idea in science.",s:"Today we ___ in science class."},
+{w:"facility",e:"🏫",m:"A building or place for an activity.",s:"The science ___ has many labs."}
+];
+var TD=[["🤖","Robots","#ffb3b3"],["🚀","Rockets","#a8d8ff"],["🦖","Dinos","#9ff0b5"],["🐙","Octopus","#ffe58a"]];
+var MODES={act:["🎭","Act it out"],draw:["✏️","Draw it"],desc:["🗣️","Describe it"],spell:["🔤","Spell relay"],slap:["🏃","Word slap"]};
+var T=[],cur=0,mode=null,deck=[],item=null,iv=null;
+var app=document.getElementById('app');
+function shuf(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+function say(t){try{speechSynthesis.cancel();var u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.8;speechSynthesis.speak(u)}catch(e){}}
+function beep(){try{var c=new (window.AudioContext||window.webkitAudioContext)(),o=c.createOscillator();o.connect(c.destination);o.frequency.value=660;o.start();setTimeout(function(){o.stop()},500)}catch(e){}}
+function pick(){if(!deck.length)deck=shuf(W);return deck.pop()}
+function $(i){return document.getElementById(i)}
+
+function setup(){
+  clearInterval(iv);T=[];mode=null;
+  app.innerHTML='<div class="center"><div class="big">🤖🧪🏆</div><h1>Tech Lab Team Showdown</h1><p class="sub">A whole-class game. The teacher uses one screen.<br>Kids move, act, draw and shout. No tablets needed!</p><p class="ins">How many teams?</p><div class="row">'+
+  [2,3,4].map(function(n){return '<button class="b" data-n="'+n+'">'+n+' teams</button>'}).join('')+'</div>'+
+  '<div class="legend"><b>5 challenges:</b><br>🎭 Act it out: no talking!<br>✏️ Draw it: on the board, no letters<br>🗣️ Describe it: do not say the word<br>🔤 Spell relay: remember it, run, write it<br>🏃 Word slap: two kids race to touch the word<br><br><b>Tip:</b> Use a projector. Use the 👀 peek button so only the actor sees the secret word.</div></div>';
+  app.querySelectorAll('[data-n]').forEach(function(b){b.onclick=function(){start(+b.dataset.n)}});
+}
+function start(n){
+  T=[];for(var i=0;i<n;i++)T.push({e:TD[i][0],n:TD[i][1],c:TD[i][2],p:0});cur=0;
+  app.innerHTML='<div id="sb"></div><div class="menu" id="mn"></div><div id="stage"></div><div class="row"><button class="b w" id="rs">↺ New game</button></div>';
+  $('rs').onclick=function(){if(confirm('Start a new game?'))setup()};
+  board();menu();idle();
+}
+function board(){
+  $('sb').innerHTML=T.map(function(t,i){
+    return '<div class="tm'+(i===cur?' on':'')+'" style="background:'+t.c+'"><div class="nm" data-t="'+i+'" title="Set turn">'+t.e+' '+t.n+(i===cur?' 👈':'')+'</div><div class="pt">'+t.p+'</div><div class="adj"><button data-a="'+i+'" data-d="-10" aria-label="Minus 10">−10</button><button data-a="'+i+'" data-d="10" aria-label="Plus 10">+10</button></div></div>'}).join('');
+  $('sb').querySelectorAll('[data-t]').forEach(function(b){b.onclick=function(){cur=+b.dataset.t;board()}});
+  $('sb').querySelectorAll('[data-a]').forEach(function(b){b.onclick=function(){T[+b.dataset.a].p+=+b.dataset.d;board()}});
+}
+function menu(){
+  $('mn').innerHTML=Object.keys(MODES).map(function(k){return '<button class="b'+(mode===k?' sel':'')+'" data-m="'+k+'">'+MODES[k][0]+' '+MODES[k][1]+'</button>'}).join('')+'<button class="b w" data-m="rand">🎲 Surprise me!</button>';
+  $('mn').querySelectorAll('[data-m]').forEach(function(b){b.onclick=function(){
+    var m=b.dataset.m;if(m==="rand"){var ks=Object.keys(MODES);m=ks[Math.floor(Math.random()*ks.length)]}run(m)}});
+}
+function idle(){$('stage').innerHTML='<div class="big">👆</div><p class="ins">Pick a challenge!</p><p class="sub">The 👈 team goes first. Tap a team name to change the turn.</p>'}
+function awards(){
+  return '<div class="aw"><p class="sub"><b>Who gets +10 points?</b></p><div class="row">'+T.map(function(t,i){return '<button class="b" style="background:'+t.c+'" data-g="'+i+'">'+t.e+' '+t.n+'</button>'}).join('')+'<button class="b w" data-g="x">Nobody</button></div></div>';
+}
+function wireAwards(){
+  $('stage').querySelectorAll('[data-g]').forEach(function(b){b.onclick=function(){
+    var g=b.dataset.g;if(g!=="x")T[+g].p+=10;
+    cur=(cur+1)%T.length;board();idle();mode=null;menu()}});
+}
+function countdown(sec,onTick,onEnd){
+  clearInterval(iv);var n=sec;onTick(n);
+  iv=setInterval(function(){n--;onTick(n);if(n<=0){clearInterval(iv);onEnd()}},1000);
+}
+function run(m){
+  clearInterval(iv);mode=m;item=pick();menu();
+  if(m==="slap")return slap();
+  if(m==="spell")return spell();
+  var ins={act:"🎭 ACT IT OUT! No talking!",draw:"✏️ DRAW IT on the board! No letters!",desc:"🗣️ DESCRIBE IT! Do not say the word!"}[m],secs=m==="desc"?45:60;
+  $('stage').innerHTML='<p class="ins">'+ins+'</p><p class="sub">'+T[cur].e+' <b>'+T[cur].n+'</b>: one player comes to the front. The team guesses!</p>'+
+  '<div class="secret" id="sec">🙈 Secret word</div><div class="row"><button class="b w" id="pk">👀 Hold to peek (actor only)</button><button class="b" id="go">▶ Start '+secs+'s timer</button><button class="b w" id="rv">✅ Show answer</button></div><div class="timer" id="tmr">'+secs+'</div><div id="awz"></div>';
+  var hid="🙈 Secret word",pk=$('pk');
+  function show(){$('sec').textContent=item.e+" "+item.w}
+  function hide(){if(!$('rv').dataset.r)$('sec').textContent=hid}
+  pk.onpointerdown=function(e){e.preventDefault();show()};
+  pk.onpointerup=pk.onpointerleave=pk.onpointercancel=hide;
+  pk.onkeydown=function(e){if(e.key==="Enter"||e.key===" "){show()}};pk.onkeyup=hide;
+  $('go').onclick=function(){countdown(secs,function(n){var t=$('tmr');if(!t)return;t.textContent=n;t.className='timer'+(n<=10?' low':'')},function(){$('tmr').textContent="⏰";beep()})};
+  $('rv').onclick=function(){$('rv').dataset.r=1;clearInterval(iv);show();say(item.w);$('awz').innerHTML='<p class="sub">'+item.m+'</p>'+awards();wireAwards()};
+}
+function spell(){
+  $('stage').innerHTML='<p class="ins">🔤 SPELL RELAY!</p><p class="sub">Look at the word. Then it hides! Run to the board and write it.</p><div class="secret" id="sec">🙈 Ready?</div><div class="row"><button class="b" id="go">▶ Show for 8 seconds</button><button class="b w" id="rv">✅ Check spelling</button></div><div class="timer" id="tmr">8</div><div id="awz"></div>';
+  $('go').onclick=function(){
+    $('sec').textContent=item.e+" "+item.w;say(item.w);
+    countdown(8,function(n){$('tmr').textContent=n},function(){$('sec').textContent="🏃 Run and write it!";$('tmr').textContent="🏃";beep()})};
+  $('rv').onclick=function(){clearInterval(iv);$('sec').textContent=item.e+" "+item.w;$('tmr').textContent="";say(item.w);$('awz').innerHTML=awards();wireAwards()};
+}
+function slap(){
+  var useS=Math.random()<.5,clue=useS?item.s.replace('___','_____'):item.m;
+  var tiles=shuf(W).map(function(x){return '<button class="tile" data-w="'+x.w+'"><span class="e">'+x.e+'</span>'+x.w+'</button>'}).join('');
+  $('stage').innerHTML='<p class="ins">🏃 WORD SLAP!</p><p class="sub">Two kids (one from each team) stand at the screen. Listen. Touch the right word!</p>'+
+  '<div class="secret" style="border-style:solid">'+clue+'</div><div class="row"><button class="b w" id="sp">🔊 Read it</button><button class="b w" id="nx">➡️ New clue</button></div><div class="grid">'+tiles+'</div><p class="sub">Teacher: tap the word the kid touched first.</p><div id="awz"></div>';
+  $('sp').onclick=function(){say(useS?item.s.replace('___','blank'):item.m)};$('nx').onclick=function(){run('slap')};
+  say(useS?item.s.replace('___','blank'):item.m);
+  $('stage').querySelectorAll('.tile').forEach(function(b){b.onclick=function(){
+    if($('awz').innerHTML)return;
+    if(b.dataset.w===item.w){b.classList.add('ok');say(item.w);$('awz').innerHTML=awards();wireAwards()}
+    else{b.classList.add('no');b.disabled=true}}});
+}
+setup();
+</script>
+</body>
+</html>
