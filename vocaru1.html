@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Vocab Arena – Unit 1</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fff7e6;--card:#fff;--ink:#231a4a;--mut:#6d6590;--pri:#5b3df5;--pri2:#7a63ff;--ok:#12a150;--okbg:#d9f7e4;--bad:#e5214f;--badbg:#ffe0e7;--bd:#e6dcc4;--sun:#ffc531;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#17123a;--card:#241d56;--ink:#f4f0ff;--mut:#b3a9e6;--pri:#8a74ff;--pri2:#a493ff;--okbg:#10442b;--badbg:#541327;--bd:#3a3080;--ok:#4ade80;--bad:#ff6b8b}}
+:root[data-theme="dark"]{--bg:#17123a;--card:#241d56;--ink:#f4f0ff;--mut:#b3a9e6;--pri:#8a74ff;--pri2:#a493ff;--okbg:#10442b;--badbg:#541327;--bd:#3a3080;--ok:#4ade80;--bad:#ff6b8b}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Fredoka,"Trebuchet MS",system-ui,sans-serif;font-size:18px}
+#app{max-width:520px;margin:0 auto;padding:14px 16px 28px;min-height:100vh}
+.top{display:flex;justify-content:space-between;align-items:center;font-weight:700;font-size:20px}
+.bar{height:10px;border-radius:9px;background:var(--bd);margin:10px 0 18px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--sun);border-radius:9px;transition:width .35s}
+.tag{margin:0 0 6px;color:var(--mut);font-size:16px}
+h1{font-size:44px;line-height:1;margin:18px 0 6px;color:var(--pri)}
+h2{font-size:24px;line-height:1.25;margin:0 0 18px;font-weight:600}
+p.sub{color:var(--mut);margin:0 0 22px}
+button{font:inherit;color:inherit;cursor:pointer}
+.opt,.mb{display:block;width:100%;text-align:left;padding:14px 16px;margin:0 0 10px;background:var(--card);border:2.5px solid var(--bd);border-bottom-width:5px;border-radius:16px;font-size:18px;transition:transform .08s}
+.opt:active,.mb:active{transform:scale(.97)}
+.opt.ok,.mb.ok{background:var(--okbg);border-color:var(--ok)}
+.opt.bad{background:var(--badbg);border-color:var(--bad);animation:sh .3s}
+.mb.bad{animation:sh .3s;border-color:var(--bad)}
+.mb.sel{border-color:var(--pri);background:var(--card);box-shadow:0 0 0 3px var(--pri2)}
+.mb.ok{opacity:.65}
+.tf{display:flex;gap:12px}.tf .opt{text-align:center;font-size:22px;font-weight:700}
+.go{width:100%;padding:16px;border:0;border-bottom:5px solid #3a22b8;border-radius:16px;background:var(--pri);color:#fff;font-size:20px;font-weight:700;margin-top:6px}
+.go.alt{background:var(--card);color:var(--ink);border:2.5px solid var(--bd);border-bottom-width:5px}
+.fb{margin-top:8px;padding:14px;border-radius:16px;font-size:17px}
+.fb.ok{background:var(--okbg)}.fb.bad{background:var(--badbg)}
+.cols{display:grid;grid-template-columns:1fr 1.5fr;gap:10px}
+.cols .mb{padding:10px 10px;font-size:15px;margin:0 0 8px}
+.big{font-size:64px;text-align:center;margin:10px 0 0}
+.score{text-align:center;font-size:40px;font-weight:700;color:var(--pri);margin:0}
+.miss{background:var(--card);border:2.5px solid var(--bd);border-radius:16px;padding:10px 14px;margin:14px 0;font-size:16px}
+.miss div{padding:6px 0;border-bottom:1px solid var(--bd)}.miss div:last-child{border:0}
+@keyframes sh{25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+@keyframes pop{0%{transform:scale(.6)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+.pop{animation:pop .4s}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body><div id="app"></div>
+<script>
+const RAW=`launch|to introduce a new product to the market
+rehearse|to practise a play or performance in advance
+it's sb's turn|it's someone's go
+opposition party|the largest political group in parliament that is not in government
+utterly|completely
+aid organisation|a group dedicated to helping people in need
+doubt|to feel uncertain that something will happen
+excavate|to carry out an archaeological dig in an area
+sophisticated|advanced
+re-enact|to repeat the actions of a historical event as a performance
+overland|across land rather than water
+sponsor|a person or organisation that pays for a particular activity
+inconvenience|something that causes difficulty or trouble
+associate|to connect one thing with another
+in a public capacity|acting in an official role while representing a government
+wade|to walk slowly through water
+advance|(of an army) to move towards the enemy
+batch|a group of items manufactured at the same time
+concrete|a hard building material made from sand, water, cement and stone
+agriculture|farming
+roam|to wander over a large area
+soaring|(of prices) increasing rapidly
+unforeseen|not expected to take place
+span|to take place over a particular period of time
+decade|a period of ten years
+filthy|extremely dirty
+deputy head|the person who is second in command at a school
+allegation|a claim, usually without evidence, that someone did something wrong
+assurance|a promise that something will happen
+channel|the established procedure that should be followed
+cliché|an overused idea or phrase that is no longer original
+dialect|a regional variation of a language
+dispute|a disagreement between two or more people
+groan|a long, deep sound made by someone in pain or disappointed
+memo|a written notification
+plea|an urgent request
+proverb|a short saying that contains a piece of wisdom
+refusal|the act of saying 'no' to someone
+reminder|something that helps you remember something
+reproach|criticism or disapproval
+tribute|an act of paying respect to someone
+infant|a very young child
+issue|to formally release something
+strike|to stop working as a form of protest
+stark|sheer; strong
+reliance|dependence
+income|financial gain; money you earn
+assert oneself|to express your opinions confidently
+caution|to warn someone to be careful
+lobby|to try to influence political decision-making
+notify|to formally inform someone
+reassure|to make someone feel less worried
+utter|to say something; to make a sound with the voice
+voice|to express something using words
+legislation|a set of laws introduced for a particular purpose
+abuse|the act of cruelly mistreating someone
+chatty|(of writing) informal and friendly
+clichéd|unoriginal
+coherent|(of an argument) logical and clear
+implicit|indirectly stated`.split("\n").map(l=>{const[a,b]=l.split("|");return{w:a,d:b}});
+const N=15,$=s=>document.querySelector(s),app=$("#app"),sh=a=>[...a].sort(()=>Math.random()-.5),rnd=a=>a[Math.floor(Math.random()*a.length)];
+const praise=["Nailed it!","Brilliant!","Sharp!","On fire!","Proficiency level!","Spot on!"];
+let pool,qi,score,lives,streak,missed,cur,best=0;
+try{best=+localStorage.getItem("va1")||0}catch(e){}
+function menu(){
+app.innerHTML=`<div class="big">🎯</div><h1>Vocab Arena</h1><p class="sub">Unit 1 · 60 words · 15 rounds. Multiple choice, true/false and matching. You have 3 lives, so think before you tap! Best score: <b>${best}</b></p>
+<button class="go" data-r="0,20">Words 1–20</button><br><button class="go" data-r="20,40" style="margin-top:12px">Words 21–40</button><br><button class="go" data-r="40,60" style="margin-top:12px">Words 41–60</button><br><button class="go alt" data-r="0,60" style="margin-top:12px">⚡ All 60 words</button>`;
+app.querySelectorAll("[data-r]").forEach(b=>b.onclick=()=>{const[a,z]=b.dataset.r.split(",");pool=RAW.slice(+a,+z);qi=0;score=0;lives=3;streak=0;missed=new Set();next()})}
+function head(){return`<div class="top"><span>${"❤️".repeat(lives)}${"🖤".repeat(3-lives)}</span><span>🔥 ${streak}</span><span>⭐ ${score}</span></div><div class="bar"><i style="width:${qi/N*100}%"></i></div>`}
+function hd(){const e=$("#hd");if(e)e.innerHTML=head()}
+function next(){
+if(qi>=N||lives<=0)return end();
+const t=qi%4==3?"match":rnd(["mc1","tf","mc2","tf"]);
+if(t=="match")return match();
+const it=rnd(pool),others=sh(RAW.filter(x=>x!==it));cur={it};
+let body;
+if(t=="mc1"){const o=sh([it,...others.slice(0,3)]);body=`<p class="tag">Which word or phrase means…</p><h2>${it.d}</h2>`+o.map(x=>`<button class="opt" data-k="${RAW.indexOf(x)}">${x.w}</button>`).join("")}
+else if(t=="mc2"){const o=sh([it,...others.slice(0,3)]);body=`<p class="tag">What does this mean?</p><h2>${it.w}</h2>`+o.map(x=>`<button class="opt" data-k="${RAW.indexOf(x)}">${x.d}</button>`).join("")}
+else{const truth=Math.random()<.5,shown=truth?it:others[0];cur.truth=truth;body=`<p class="tag">True or false?</p><h2>“${it.w}” means: ${shown.d}</h2><div class="tf"><button class="opt" data-k="1">✅ True</button><button class="opt" data-k="0">❌ False</button></div>`}
+app.innerHTML=`<div id="hd">${head()}</div>${body}<div id="fb"></div>`;
+app.querySelectorAll(".opt").forEach(b=>b.onclick=()=>ans(t,b))}
+function ans(t,b){
+const it=cur.it,all=[...app.querySelectorAll(".opt")];
+const good=t=="tf"?(b.dataset.k=="1")==cur.truth:+b.dataset.k==RAW.indexOf(it);
+all.forEach(x=>x.disabled=true);
+if(t=="tf"){all.forEach(x=>{if((x.dataset.k=="1")==cur.truth)x.classList.add("ok")})}else all.forEach(x=>{if(+x.dataset.k==RAW.indexOf(it))x.classList.add("ok")});
+if(good){streak++;score+=10+Math.min(streak-1,5)*2;b.classList.add("ok","pop")}else{b.classList.add("bad");lives--;streak=0;missed.add(it);try{navigator.vibrate(120)}catch(e){}}
+qi++;hd();
+$("#fb").innerHTML=`<div class="fb ${good?"ok":"bad"}"><b>${good?rnd(praise):"Not quite."}</b><br><b>${it.w}</b> = ${it.d}</div><button class="go" id="nx">${qi>=N||lives<=0?"See results":"Next"}</button>`;
+$("#nx").onclick=next}
+function match(){
+const items=sh(pool).slice(0,5),R=sh(items);let L=null,done=0;
+app.innerHTML=`<div id="hd">${head()}</div><p class="tag">Match-up! Tap a word, then its meaning.</p><div class="cols"><div>${items.map(x=>`<button class="mb" data-s="l" data-i="${RAW.indexOf(x)}">${x.w}</button>`).join("")}</div><div>${R.map(x=>`<button class="mb" data-s="r" data-i="${RAW.indexOf(x)}">${x.d}</button>`).join("")}</div></div><div id="fb"></div>`;
+app.querySelectorAll(".mb").forEach(b=>b.onclick=()=>{
+if(b.classList.contains("ok"))return;
+if(b.dataset.s=="l"){app.querySelectorAll('.mb[data-s="l"]').forEach(x=>x.classList.remove("sel"));b.classList.add("sel");L=b;return}
+if(!L)return;
+const l=L;L=null;l.classList.remove("sel");
+if(l.dataset.i==b.dataset.i){l.classList.add("ok");b.classList.add("ok");done++;streak++;score+=8;hd();
+if(done==5){qi++;score+=10;hd();$("#fb").innerHTML=`<div class="fb ok"><b>${rnd(praise)}</b> All five matched. +10 bonus!</div><button class="go" id="nx">${qi>=N?"See results":"Next"}</button>`;$("#nx").onclick=next}}
+else{streak=0;score=Math.max(0,score-5);missed.add(RAW[+l.dataset.i]);[l,b].forEach(x=>{x.classList.add("bad");setTimeout(()=>x.classList.remove("bad"),400)});try{navigator.vibrate(120)}catch(e){}hd()}})}
+function end(){
+const ok=lives>0,rank=score>=200?["🏆","Vocabulary legend"]:score>=130?["🥇","Word wizard"]:score>=70?["🥈","Getting there"]:["🌱","Keep practising"];
+if(score>best){best=score;try{localStorage.setItem("va1",best)}catch(e){}}
+const m=[...missed];
+app.innerHTML=`<div class="big">${ok?rank[0]:"💔"}</div><h1 style="text-align:center;font-size:32px">${ok?rank[1]:"Out of lives!"}</h1><p class="score">${score} pts</p><p class="sub" style="text-align:center">Best: ${best}</p>`+
+(m.length?`<h2 style="font-size:20px">Words to review (${m.length})</h2><div class="miss">${m.map(x=>`<div><b>${x.w}</b>: ${x.d}</div>`).join("")}</div>`:`<div class="fb ok" style="text-align:center"><b>Flawless! No mistakes.</b></div>`)+
+`<button class="go" id="again">Play again</button><button class="go alt" id="mn" style="margin-top:12px">Choose words</button>`;
+$("#again").onclick=()=>{qi=0;score=0;lives=3;streak=0;missed=new Set();next()};$("#mn").onclick=menu}
+menu();
+</script></body></html>
